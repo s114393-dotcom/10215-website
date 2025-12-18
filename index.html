@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梗圖抽獎機</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --bg: #dfe6e9;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .congrats-msg {
+            font-size: 1.5rem;
+            color: #d63031;
+            font-weight: bold;
+            height: 2rem;
+            margin-bottom: 10px;
+            opacity: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .meme-container {
+            position: relative;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f0f0f0;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+        }
+
+        #meme-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease, filter 0.3s;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), #a29bfe);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .show-anim {
+            animation: popIn 0.4s forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="congrats" class="congrats-msg">請點擊下方按鈕抽獎</div>
+
+    <div class="card">
+        <div class="meme-container">
+            <img id="meme-image" src="cover.jpg" alt="封面圖載入中...">
+        </div>
+
+        <button class="btn" onclick="generateMeme()">🎁 產生驚喜梗圖！</button>
+    </div>
+
+    <script>
+        const memes = [
+            { name: "【Leclerc】", img: "meme1.webp" },
+            { name: "【大胖橘】", img: "meme2.jpeg" },
+            { name: "【無言小雞】", img: "meme3.jpeg" },
+            { name: "【暴躁小魔女】", img: "meme4.jpeg" },
+            { name: "【雀食TT】", img: "meme5.jpeg" }, // 原本這裡開始漏了逗號
+            { name: "【問號小狗】", img: "meme6.jpeg" },
+            { name: "【害怕的小饅頭】", img: "meme7.jpeg" },
+            { name: "【暴躁小魔女2.0】", img: "meme8.jpeg" },
+            { name: "【中指小狗】", img: "meme9.jpeg" },
+            { name: "【疲勞小雞】", img: "meme10.jpeg" }
+        ];
+
+        function generateMeme() {
+            const congratsElement = document.getElementById('congrats');
+            const imgElement = document.getElementById('meme-image');
+
+            // 隨機選擇
+            const randomMeme = memes[Math.floor(Math.random() * memes.length)];
+
+            // 1. 顯示恭喜文字與動畫
+            congratsElement.innerText = `🎉 恭喜你得到 ${randomMeme.name}！`;
+            congratsElement.style.opacity = 1;
+            congratsElement.classList.remove('show-anim');
+            void congratsElement.offsetWidth;
+            congratsElement.classList.add('show-anim');
+
+            // 2. 切換圖片動畫 (先模糊再變亮)
+            imgElement.style.filter = "brightness(1.5) blur(5px)";
+            setTimeout(() => {
+                imgElement.src = randomMeme.img;
+                imgElement.style.filter = "brightness(1) blur(0px)";
+                imgElement.style.transform = "scale(1.05)";
+                setTimeout(() => {
+                    imgElement.style.transform = "scale(1)";
+                }, 200);
+            }, 250);
+        }
+    </script>
+
+</body>
+</html>
